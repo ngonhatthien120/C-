@@ -39,7 +39,7 @@ int gcd(int a, int b) {
     }
     return a + b;
 }
-
+//giai thich code ở trên trang nguyenvanhieu.vn
 long long maxReward(int n, vector<long long> k)
 {
     sort(k.begin(), k.end()); // Phải khai báo thư viện algorithm
