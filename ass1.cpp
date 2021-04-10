@@ -316,11 +316,12 @@ string findRoute(const string input3)
     }
     return input[2];
 }
+// chua lam lun
 string decodeVfunction(const string A, const string B)
 {
     return "You can remove this return";
 }
-
+// sua lai return la xong
 string findBetrayals(const string input5[], const int N5)
 {
     int kiTu[26] = {};
@@ -330,18 +331,50 @@ string findBetrayals(const string input5[], const int N5)
             kiTu[input5[i][j] - 65] += 6 - j;
         }
     }
-    int cout = 0;
+    int count = 0;
     for (int j = 0;; j++) {
         int x = Maxx(kiTu, 26)-j;
-        for (int i = 0; i <= 26; i++) {
-            if (kiTu[i] == x && cout < 3) {
+        for (int i = 0; i <= 25; i++) {
+            if (kiTu[i] == x && count < 3) {
                 res += i + 'A';
-                cout++;
+                count++;
             }
-            if (cout == 3) return res;
+            if (count == 3) return res;
         }
     }
     return "You can remove this return";
+}
+int attack(const string input6[])
+{
+    string res;
+    int danThuong[10] = {};
+    for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < input6[i].size(); j++) {
+            if (input6[i][j] == '0') danThuong[i]++;
+        }
+    }
+    int count = 0;
+    for (int j = 0;; j++) {
+        int max = Maxx(danThuong, 10);
+        for (int i = 0; i <= 9; i++) {
+            if (danThuong[i] == max && count < 3) {
+                res += i + '0';
+                count++;
+            }
+            if (count == 3) break;
+        }
+        if (count == 3) break;
+    }
+    for (int i = 0; i < res.size(); i++) {
+        int k = res[i] - '0';
+        int viTri = input6[k].find('2');
+        if (viTri != string::npos) {
+            res.erase(i, 1);
+            i--;
+        }
+    }
+    if (res != "") return res[res.size()-1] - '0';
+    return -1;
 }
 int main()
 {
@@ -359,8 +392,16 @@ int main()
         }
     }
     cout << s;*/
-    string input5[] = { "ABCDEF", "GHEABC",  "HGCBAE" };
-    int N5 = 3;
-    cout << findBetrayals(input5, N5);
-}
+    string input6[] = { "0 0 1 0 0 0 0 0 0 0",
+                       "1 1 0 0 0 0 0 0 0 0",
+                       "1 0 1 1 1 0 0 0 0 0",
+                       "0 0 0 2 0 0 0 0 0 0",
+                       "1 0 0 0 0 0 0 0 0 0",
+                       "1 1 0 0 0 0 0 0 0 0",
+                       "1 1 0 0 0 0 0 0 0 0",
+                       "1 1 0 0 0 0 0 0 0 0",
+                       "1 1 0 0 0 0 0 0 0 0",
+                       "1 1 0 0 0 0 0 0 0 0" };
 
+    std:: cout << attack(input6);
+}
