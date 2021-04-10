@@ -206,6 +206,34 @@ int Maxx(int* arr, int size) {
     if (size == 1) return arr[0];
     else return arr[size - 1] > Maxx(arr, size - 1) ? arr[size - 1] : Maxx(arr, size - 1);
 }
+// chuyen tu chuoi sang ma tran
+vector<vector<int>> stringToMatrix(string input, int N7) {
+    vector<vector<int>> Matrix(N7, vector<int>(N7));
+    string s = "";
+    for (int i = 0; i < input.size(); i++) {
+        int x = 0, y = 0;
+        if (input[i] != ' ') s += input[i];
+        else {
+            if (y == N7) {
+                x++;
+                y = 0;
+            }
+            Matrix[x][y] = StringInt(s);
+            s = ""; y++;
+        }
+    }
+    return Matrix;
+}
+//ket qua phep nhan (chu nhat ta test thu xem^^)
+vector<vector<int>> resultVector(vector<vector<int>> A, vector<vector<int>> B, int N7) {
+    vector<vector<int>> res(N7, vector<int>(N7));
+    for (int i = 0; i < N7; i++) {
+        for (int j = 0; j < N7; j++) {
+            res[i][j] = A[i][j] * B[j][i];
+        }
+    }
+    return res;
+}
 string readyForBattle(const string ID[], const int NID, const string input1[], const int N1)
 {
     vector <string> res = Chuyen(input1, N1); 
@@ -292,7 +320,6 @@ int decode(const string A, const string B)
     }
     return dem;
 }
-// chua tra ve gia tri (x,y)
 string findRoute(const string input3)
 {
     vector<string> input;
@@ -387,7 +414,24 @@ int attack(const string input6[])
 }
 //Coi lai cai cua Ha Tan Khanh Nam
 int calculateNoOfWaitingDays(const string input7Str, const string input7Matrix[], const int k)
-{
+{ 
+    //vector<vector<int>> Matrix (N7, vector<int>(N7));
+    //vector<vector<vector<int>>> Matrix (k, vector<vector<int>>(N7, vector<int>(N7)));
+
+    vector<int> Lay(4);
+    string s = "";
+    for (int i = 0; i < input7Str.size(); i++) {
+        if (input7Str[i] != ' ') s += input7Str[i];
+        else {
+            Lay.push_back(StringInt(s));
+            s = "";
+        }
+    }
+    Lay.push_back(StringInt(s)); s = "";
+    int N7 = Lay[0], V = Lay[1], i = Lay[2], j = Lay[3];
+    for (int x = 0; x < k; x++) {
+
+    }
     return -1;
 }
 int main()
