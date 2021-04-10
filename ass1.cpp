@@ -314,7 +314,16 @@ string findRoute(const string input3)
     for (int i = 0; i < input[2].size(); i++) {
         input[2][i] = change(input[2][i], N, i);
     }
-    return input[2];
+    int x = 0,y = 0;
+    for (int i = 0; i < input[2].size(); i++) {
+        if (input[2][i] == 'U') y++;
+        else if (input[2][i] == 'D') y--;
+        else if (input[2][i] == 'R') x++;
+        else if (input[2][i] == 'L') x--;
+    }
+    string res ="";
+    res += '('; res += (x + '0'); res += ','; res += (y + '0'); res += ')';
+    return res;
 }
 // chua lam lun
 string decodeVfunction(const string A, const string B)
@@ -376,6 +385,11 @@ int attack(const string input6[])
     if (res != "") return res[res.size()-1] - '0';
     return -1;
 }
+//Coi lai cai cua Ha Tan Khanh Nam
+int calculateNoOfWaitingDays(const string input7Str, const string input7Matrix[], const int k)
+{
+    return -1;
+}
 int main()
 {
     /*string ID[1] = { "Hii" };
@@ -392,6 +406,7 @@ int main()
         }
     }
     cout << s;*/
+    cout << findRoute("3 0 UDL");
     string input6[] = { "0 0 1 0 0 0 0 0 0 0",
                        "1 1 0 0 0 0 0 0 0 0",
                        "1 0 1 1 1 0 0 0 0 0",
