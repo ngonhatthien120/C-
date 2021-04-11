@@ -210,8 +210,8 @@ int Maxx(int* arr, int size) {
 vector<vector<int>> stringToMatrix(string input, int N7) {
     vector<vector<int>> Matrix(N7, vector<int>(N7));
     string s = "";
+    int x = 0, y = 0;
     for (int i = 0; i < input.size(); i++) {
-        int x = 0, y = 0;
         if (input[i] != ' ') s += input[i];
         else {
             if (y == N7) {
@@ -222,14 +222,16 @@ vector<vector<int>> stringToMatrix(string input, int N7) {
             s = ""; y++;
         }
     }
+    Matrix[x][y] = StringInt(s);
     return Matrix;
 }
 //ket qua phep nhan (chu nhat ta test thu xem^^)
 vector<vector<int>> resultVector(vector<vector<int>> A, vector<vector<int>> B, int N7) {
     vector<vector<int>> res(N7, vector<int>(N7));
     for (int i = 0; i < N7; i++) {
-        for (int j = 0; j < N7; j++) {
-            res[i][j] = A[i][j] * B[j][i];
+        for (int j = 0; j < N7; j++) {//
+            for(int x = 0; x < N7; x++) 
+                res[i][j] += A[i][x] * B[x][j];
         }
     }
     return res;
@@ -420,6 +422,7 @@ int calculateNoOfWaitingDays(const string input7Str, const string input7Matrix[]
 
     vector<int> Lay(4);
     string s = "";
+
     for (int i = 0; i < input7Str.size(); i++) {
         if (input7Str[i] != ' ') s += input7Str[i];
         else {
@@ -429,10 +432,14 @@ int calculateNoOfWaitingDays(const string input7Str, const string input7Matrix[]
     }
     Lay.push_back(StringInt(s)); s = "";
     int N7 = Lay[0], V = Lay[1], i = Lay[2], j = Lay[3];
-    for (int x = 0; x < k; x++) {
+    vector<vector<int>> A = { {1,0,0},{0,1,0},{0,0,1} };
 
+    for (int x = 0; x < k; x++) {
+        vector<vector<int>> B = stringToMatrix(input7Matrix[x], N7);
+        A = resultVector(A, B, N7);
     }
-    return -1;
+
+    return A[i][j] % V;
 }
 int main()
 {
@@ -450,7 +457,7 @@ int main()
         }
     }
     cout << s;*/
-    cout << findRoute("3 0 UDL");
+    //cout << findRoute("3 0 UDL");
     string input6[] = { "0 0 1 0 0 0 0 0 0 0",
                        "1 1 0 0 0 0 0 0 0 0",
                        "1 0 1 1 1 0 0 0 0 0",
@@ -462,5 +469,23 @@ int main()
                        "1 1 0 0 0 0 0 0 0 0",
                        "1 1 0 0 0 0 0 0 0 0" };
 
-    std:: cout << attack(input6);
+    //std:: cout << attack(input6);
+
+    /*vector<vector<int>> A = { {1,2,3}, {4,5,6},{7,8,9} };
+    vector<vector<int>> B = { {1,1,3}, {4,5,5},{7,8,8} };
+    vector<vector<int>> C = resultVector(A, B,3);
+    for (int i = 0; i < C.size(); i++) {
+        for (int j = 0; j < C.size(); j++) {
+            cout << C[i][j] << ' ';
+        }
+        cout << endl;
+    }*/
+    string s = "1 2 3 4 5 6 7 8 9";
+    vector<vector<int>> C = stringToMatrix(s, 3);
+    for (int i = 0; i < C.size(); i++) {
+        for (int j = 0; j < C.size(); j++) {
+            cout << C[i][j] << ' ';
+        }
+        cout << endl;
+    }
 }
