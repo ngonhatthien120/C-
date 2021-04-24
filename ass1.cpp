@@ -1,24 +1,37 @@
-#include <iostream>
-#include <iomanip>
-#include <cmath>
-#include <fstream>
-#include <string>
-#include <vector>
-// cẩn thận trường hợp có thăng với @ cuối cùng
-using namespace std;
+//
+// Created by Nhan Nguyen on 01/03/2021.
+//
+#ifndef MONGOL_H
+#define MONGOL_H
 
-char so(string s) { 
+// The library here is concretely set, students are not allowed to include any other libraries.
+
+string readyForBattle(const string ID[], const int NID, const string input1[], const int N1);
+int decode(const string A, const string B);
+string findRoute(const string input3);
+string decodeVfunction(const string A, const string B);
+string findBetrayals(const string input5[], const int N5);
+int attack(const string input6[]);
+int calculateNoOfWaitingDays(const string input7Str, const string input7Matrix[], const int k);
+
+////////////////////////////////////////////////////////////////////////////
+/// STUDENT'S ANSWER HERE
+////////////////////////////////////////////////////////////////////////////
+
+//chuyen bit sang so
+char so(string s) {
     if (s == "00") return '0';
     else if (s == "01") return '1';
     else if (s == "10") return '2';
     else if (s == "11") return '3';
+    else return '\0';
 }
 //Chuyen nhi phan sang thap phan
 vector <string> Chuyen(const string input1[], const int N1)
 {
     vector<string> res(N1);
     for (int i = 0; i < N1; i++) {
-        for (int j = 0; j < input1[i].size(); j+=2) {
+        for (int j = 0; j < input1[i].size(); j += 2) {
             string s;
             if (input1[i][j] != ' ') {
                 s.push_back(input1[i][j]); s.push_back(input1[i][j + 1]);
@@ -33,7 +46,7 @@ vector <string> Chuyen(const string input1[], const int N1)
     return res;
 }
 //tao ham truyen mot chuoi, tinh so cac so trung voi so ban dau
-int demSo(string s) 
+int demSo(string s)
 {
     int dem = 0;
     for (unsigned int i = 0; i < s.size(); i++) {
@@ -45,7 +58,7 @@ int demSo(string s)
 // kiem tra quan doi nha tran co vua or tương khong
 int kiemTra(string s)
 {
-    if (s[0] == 'V' && s[1] == 'U' && s[1] == 'A') return 1; //co vua
+    if (s[0] == 'V' && s[1] == 'U' && s[2] == 'A') return 1; //co vua
     else {
         for (int i = 2; i < s.size() - 1; i++) {
             if (s[i - 1] == 'T' && s[i] == 'H' && s[i + 1] == 'D') return -1; // co tuong
@@ -55,6 +68,7 @@ int kiemTra(string s)
 }
 string taoChuoi(char c, int so)
 {
+    so = so % 7 ;
     string ans;
     switch (c) {
     case '0':
@@ -64,7 +78,7 @@ string taoChuoi(char c, int so)
         else if (so == 4) ans += 'H';
         else if (so == 5) ans += 'I';
         else if (so == 6) ans += 'J';
-        else if (so == 7) ans += 'K';
+        else if (so == 0) ans += 'K';
         break;
     case '1':
         if (so == 1) ans += 'L';
@@ -73,7 +87,7 @@ string taoChuoi(char c, int so)
         else if (so == 4) ans += 'O';
         else if (so == 5) ans += 'P';
         else if (so == 6) ans += 'Q';
-        else if (so == 7) ans += 'R';
+        else if (so == 0) ans += 'R';
         break;
     case '2':
         if (so == 1) ans += '#';
@@ -82,7 +96,7 @@ string taoChuoi(char c, int so)
         else if (so == 4) ans += 'V';
         else if (so == 5) ans += 'W';
         else if (so == 6) ans += 'X';
-        else if (so == 7) ans += 'Y';
+        else if (so == 0) ans += 'Y';
         break;
     case '3':
         if (so == 1) ans += '@';
@@ -91,9 +105,9 @@ string taoChuoi(char c, int so)
         else if (so == 4) ans += 'Z';
         else if (so == 5) ans += 'B';
         else if (so == 6) ans += 'C';
-        else if (so == 7) ans += 'D';
+        else if (so == 0) ans += 'D';
         break;
-    }   
+    }
     return ans;
 }
 //them ki tu vao ( # )
@@ -112,35 +126,39 @@ string dao(string input)
     return res;
 }
 //xu li vu @ va #
-//chua xu ly vy @ va # nam trong 1 chuoi vd #abc@lt
-//Nguyen Trong Nghia
-void giaiMa(string &str)
+void giaiMa(string& str)
 {
     string hashAt;
     for (int i = 0; i < str.size(); i++) {
         string tach;
-        while (str[str.size() - 1] == '#' || str[str.size() - 1] == '@') str.erase(str.size() - 1, 1);
-        if (str[i] == '#' || str[i] == '@') {
-            tach += str[i];
-            for (int j = i + 1; j < str.size(); j++) { // if the character != # and @ tao chuoi moi
-                if (str[j] != '#' && str[j] != '@') tach += str[j];
-                else {
-                    i = j - 1;
-                    break;
+        if ((str[0] == '#' || str[0] == '@') && str.size() == 1) str = "";
+        else {
+            while (str[str.size() - 1] == '#' || str[str.size() - 1] == '@') str.erase(str.size() - 1, 1);
+            if (str[i] == '#' || str[i] == '@') {
+                tach += str[i];
+                for (int j = i + 1; j < str.size(); j++) { // if the character != # and @ tao chuoi moi
+                    if (str[j] != '#' && str[j] != '@') tach += str[j];
+                    else {
+                        i = j-1 ;
+                        break;
+                    }
+                    i = str.size();
+                }
+
+                if (tach[0] == '#') {
+                    tach.push_back(Them(tach[tach.size() - 1]));
+                    hashAt += tach;
+                }
+                if (tach[0] == '@') {
+                    string a = dao(tach.substr(1));
+                    tach.replace(1, a.size(), a);
+                    hashAt += tach;
                 }
             }
-            if (tach[0] == '#') {
-                tach.push_back(Them(tach[tach.size() - 1]));
-                hashAt += tach;
-            }
-            if (tach[0] == '@') {
-                string a = dao(tach.substr(1));
-                tach.replace(1, a.size(), a);
-                hashAt += tach;
-            }
+            else hashAt += str[i];
         }
     }
-    str = hashAt;
+    str = hashAt ;
 }
 //sap xep
 string sortS(string s)
@@ -151,6 +169,32 @@ string sortS(string s)
         }
     }
     return s;
+}
+// Xu ly B tu [0..M-1]
+void xuLyChuoi(string B, int M, int xuLy[])
+{
+    // Do dai cua chuoi tien to = hau to dai nhat truoc do
+    int len = 0;
+    xuLy[0] = 0;
+    int i = 1;
+    while (i < M) {
+        if (B[i] == B[len]) {
+            len++;
+            xuLy[i] = len;
+            i++;
+        }
+        else
+        {
+            if (len != 0) {
+                len = xuLy[len - 1];
+            }
+            else
+            {
+                xuLy[i] = 0;
+                i++;
+            }
+        }
+    }
 }
 bool check(string text, string pattern, int i) {
     if (text.size() - i < pattern.size()) return false;
@@ -164,18 +208,23 @@ bool check(string text, string pattern, int i) {
 //Chuyen string thanh int
 int StringInt(string s) {
     int n = 0;
+    int dau = 0;
+    if (s[0] == '-') {
+        s.erase(0, 1);
+        dau = 1;
+    }
     while (s != "") {
         n = s[0] - '0' + n * 10;
         s.erase(0, 1);
     }
-    return n;
+    return dau ? -n : n;
 }
 //dich chuoi
-void shiftArray(string &arr, int B) {
+void shiftArray(string& arr, int B) {
     //TODO
     int n = arr.size();
     if (B < 0) {
-        for (int i = 0; i < B; i++) {
+        for (int i = 0; i < abs(B); i++) {
             char x = arr[0];
             for (int i = 0; i < n - 1; i++) {
                 arr[i] = arr[i + 1];
@@ -183,7 +232,7 @@ void shiftArray(string &arr, int B) {
             arr[n - 1] = x;
         }
     }
-    else if(B > 0) {
+    else if (B > 0) {
         for (int i = 0; i < B; i++) {
             char x = arr[n - 1];
             for (int i = n - 1; i > 0; i--) {
@@ -196,7 +245,7 @@ void shiftArray(string &arr, int B) {
 //thay doi ki tu trong findRoute
 char change(char C, int N, int i)
 {
-    int x = abs(N - 2 * i) ;
+    int x = abs(N - 2 * i);
     string s = "UDLR";
     size_t pos = s.find(C);
     return s[(pos + x) % 4];
@@ -222,23 +271,31 @@ vector<vector<int>> stringToMatrix(string input, int N7) {
             s = ""; y++;
         }
     }
-    Matrix[x][y] = StringInt(s);
     return Matrix;
 }
 //ket qua phep nhan (chu nhat ta test thu xem^^)
-vector<vector<int>> resultVector(vector<vector<int>> A, vector<vector<int>> B, int N7) {
-    vector<vector<int>> res(N7, vector<int>(N7));
+vector<vector<long long>> resultVector(vector<vector<long long>> A, vector<vector<int>> B, int N7) {
+    vector<vector<long long>> res(N7, vector<long long>(N7));
     for (int i = 0; i < N7; i++) {
-        for (int j = 0; j < N7; j++) {//
-            for(int x = 0; x < N7; x++) 
+        for (int j = 0; j < N7; j++) {
+            for (int x = 0; x < N7; x++)
                 res[i][j] += A[i][x] * B[x][j];
         }
     }
     return res;
 }
+//dem V trong chuoi
+int demV(string s) {
+    int dem = 0;
+    for (int i = 0; i < s.size(); i++) {
+        if (s[i] == 'V') dem++;
+    }
+    return dem;
+}
+
 string readyForBattle(const string ID[], const int NID, const string input1[], const int N1)
 {
-    vector <string> res = Chuyen(input1, N1); 
+    vector <string> res = Chuyen(input1, N1);
     //tao chuoi
     vector <string> ans(N1);
     for (int i = 0; i < res.size(); i++) {
@@ -266,25 +323,26 @@ string readyForBattle(const string ID[], const int NID, const string input1[], c
             }
         }
     }
-    // coi lai cau hoi cua Tran Quang Thang
     for (int i = 0; i < NID; i++) {
         //Co vua
         if (kiemTra(ID[i]) == 1) {
             for (int i = 0; i < N1; i++) {
                 string chan, le;
                 for (int j = 0; j < ans[i].size(); j++) {
-                    if (i % 2 == 0) chan += ans[i][j];
-                    else le += ans[i][j];
+                    if (j % 2 == 0) le += ans[i][j];
+                    else chan += ans[i][j];
                 }
-                chan = dao(chan); 
-                le = dao(le); 
+                chan = dao(chan);
+                le = dao(le);
+                int index = 0;
                 for (int j = 0; j < ans[i].size(); j++) {
-                    if (i % 2 == 0) {
-                        if (chan[i / 2] > ans[i][j]) ans[i][j] = chan[i / 2];
+                    if (index % 2 == 0) {
+                        if (le[index / 2] > ans[i][j]) ans[i][j] = le[index / 2];
                     }
                     else {
-                        if (le[i / 2] > ans[i][j]) le += ans[i / 2];
+                        if (chan[index / 2] > ans[i][j]) ans[i][j] = chan[index / 2];
                     }
+                    index++;
                 }
             }
         }
@@ -293,8 +351,8 @@ string readyForBattle(const string ID[], const int NID, const string input1[], c
             for (int i = 0; i < N1; i++) {
                 int cout = 0;
                 for (int j = 0; j < ans[i].size(); j++) {
-                    if (i % 3 == 0) {
-                        ans[i].erase(j + cout, 1);
+                    if ((j + cout) % 3 == 0) {
+                        ans[i].erase(j , 1);
                         cout++;
                     }
                 }
@@ -309,17 +367,34 @@ string readyForBattle(const string ID[], const int NID, const string input1[], c
     }
     return result;
 }
-
 int decode(const string A, const string B)
 {
     int dem = 0;
-    for (int i = 0; i < (int)A.size(); i++) {
-        if (A[i] == B[0]) {
-            if (check(A, B, i)) {
-                dem++;
-            }
+    int M = B.size();
+    int N = A.size();
+    // xuLy[] de tim chuoi dai nhat tien to = hau to
+    int* xuLy = new int[M];
+    xuLyChuoi(B, M, xuLy);
+
+    int i = 0; // bien chay cua A
+    int j = 0; // bien chay cua B
+    while (i < N) {
+        if (B[j] == A[i]) {
+            j++;
+            i++;
+        }
+        if (j == M) {
+            j = xuLy[j - 1];
+            dem++;
+        }
+        else if (i < N && B[j] != A[i]) {
+            if (j != 0)
+                j = xuLy[j - 1];
+            else
+                i = i + 1;
         }
     }
+
     return dem;
 }
 string findRoute(const string input3)
@@ -339,27 +414,43 @@ string findRoute(const string input3)
     //Chuyen mot so nguyen
     int B = StringInt(input[1]);
     //Dich chuoi
-    shiftArray(input[2],B);
+    shiftArray(input[2], B);
     for (int i = 0; i < input[2].size(); i++) {
         input[2][i] = change(input[2][i], N, i);
     }
-    int x = 0,y = 0;
+    int x = 0, y = 0;
     for (int i = 0; i < input[2].size(); i++) {
         if (input[2][i] == 'U') y++;
         else if (input[2][i] == 'D') y--;
         else if (input[2][i] == 'R') x++;
         else if (input[2][i] == 'L') x--;
     }
-    string res ="";
-    res += '('; res += (x + '0'); res += ','; res += (y + '0'); res += ')';
+    string res = "";
+    string X,Y;
+    if (x < 0) {
+        X = '-'; X += abs(x) + '0';
+    }
+
+    else X = x + '0';
+    if (y < 0) {
+        Y = '-'; Y += (abs(y) + '0');
+    }
+    else Y = y + '0';
+    res += '('; res += X; res += ','; res += Y; res += ')';
     return res;
 }
-// chua lam lun
 string decodeVfunction(const string A, const string B)
 {
-    return "You can remove this return";
+    int res = demV(A) * demV(B);
+    if (res == 0) return "0";
+    string result = "V(0)";
+    for (int i = 1; i < res; i++) {
+        result.push_back(')');
+        result.insert(0, "V(");
+    }
+    return result;
 }
-// sua lai return la xong
+//sua lai cai return
 string findBetrayals(const string input5[], const int N5)
 {
     int kiTu[26] = {};
@@ -371,7 +462,7 @@ string findBetrayals(const string input5[], const int N5)
     }
     int count = 0;
     for (int j = 0;; j++) {
-        int x = Maxx(kiTu, 26)-j;
+        int x = Maxx(kiTu, 26) - j;
         for (int i = 0; i <= 25; i++) {
             if (kiTu[i] == x && count < 3) {
                 res += i + 'A';
@@ -389,38 +480,26 @@ int attack(const string input6[])
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < input6[i].size(); j++) {
             if (input6[i][j] == '0') danThuong[i]++;
-        }
-    }
-    int count = 0;
-    for (int j = 0;; j++) {
-        int max = Maxx(danThuong, 10);
-        for (int i = 0; i <= 9; i++) {
-            if (danThuong[i] == max && count < 3) {
-                res += i + '0';
-                count++;
+            if (input6[i][j] == '2') { // khi no bang 2 thi khong danh duoc
+                danThuong[i] = -1;
+                break;
             }
-            if (count == 3) break;
-        }
-        if (count == 3) break;
-    }
-    for (int i = 0; i < res.size(); i++) {
-        int k = res[i] - '0';
-        int viTri = input6[k].find('2');
-        if (viTri != string::npos) {
-            res.erase(i, 1);
-            i--;
         }
     }
-    if (res != "") return res[res.size()-1] - '0';
-    return -1;
+    int max = Maxx(danThuong, 10);
+    if (max != -1) {
+        for (int i = 0; i <= 9; i++) {
+            if (danThuong[i] == max) {
+                res += i + '0';
+            }
+        }
+    }
+        if (res != "") return res[res.size() - 1] - '0';
+        return -1;
 }
-//Coi lai cai cua Ha Tan Khanh Nam
 int calculateNoOfWaitingDays(const string input7Str, const string input7Matrix[], const int k)
-{ 
-    //vector<vector<int>> Matrix (N7, vector<int>(N7));
-    //vector<vector<vector<int>>> Matrix (k, vector<vector<int>>(N7, vector<int>(N7)));
-
-    vector<int> Lay(4);
+{
+    vector<int> Lay;
     string s = "";
 
     for (int i = 0; i < input7Str.size(); i++) {
@@ -432,60 +511,16 @@ int calculateNoOfWaitingDays(const string input7Str, const string input7Matrix[]
     }
     Lay.push_back(StringInt(s)); s = "";
     int N7 = Lay[0], V = Lay[1], i = Lay[2], j = Lay[3];
-    vector<vector<int>> A = { {1,0,0},{0,1,0},{0,0,1} };
-
+    vector<vector<long long>> A(N7, vector<long long>(N7));
+    for (int k = 0; k < N7; k++) {
+        A[k][k] = 1;
+    }
     for (int x = 0; x < k; x++) {
         vector<vector<int>> B = stringToMatrix(input7Matrix[x], N7);
         A = resultVector(A, B, N7);
     }
-
-    return A[i][j] % V;
+    int res = A[i - 1][j - 1] % V;
+    return res < 0 ? V + res : res;
 }
-int main()
-{
-    /*string ID[1] = { "Hii" };
-    const int NID = 0;
-    const int N1 = 3;
-    const string input1[] = { "10 1111 1010", "11 01 1010" ,"11 01 1010 11 01 101010"};
-    string res = readyForBattle(ID, NID, input1, N1);
-    cout << res;
-    string s = "#ABC#CDE#";
-    for (int j = 0; j < s.size(); j++) {
-        if (s[j] == '@' || s[j] == '#') {
-            s.erase(j, 1);
-            j--;
-        }
-    }
-    cout << s;*/
-    //cout << findRoute("3 0 UDL");
-    string input6[] = { "0 0 1 0 0 0 0 0 0 0",
-                       "1 1 0 0 0 0 0 0 0 0",
-                       "1 0 1 1 1 0 0 0 0 0",
-                       "0 0 0 2 0 0 0 0 0 0",
-                       "1 0 0 0 0 0 0 0 0 0",
-                       "1 1 0 0 0 0 0 0 0 0",
-                       "1 1 0 0 0 0 0 0 0 0",
-                       "1 1 0 0 0 0 0 0 0 0",
-                       "1 1 0 0 0 0 0 0 0 0",
-                       "1 1 0 0 0 0 0 0 0 0" };
 
-    //std:: cout << attack(input6);
-
-    /*vector<vector<int>> A = { {1,2,3}, {4,5,6},{7,8,9} };
-    vector<vector<int>> B = { {1,1,3}, {4,5,5},{7,8,8} };
-    vector<vector<int>> C = resultVector(A, B,3);
-    for (int i = 0; i < C.size(); i++) {
-        for (int j = 0; j < C.size(); j++) {
-            cout << C[i][j] << ' ';
-        }
-        cout << endl;
-    }*/
-    string s = "1 2 3 4 5 6 7 8 9";
-    vector<vector<int>> C = stringToMatrix(s, 3);
-    for (int i = 0; i < C.size(); i++) {
-        for (int j = 0; j < C.size(); j++) {
-            cout << C[i][j] << ' ';
-        }
-        cout << endl;
-    }
-}
+#endif /* MONGOL_H */
