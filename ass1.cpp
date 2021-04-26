@@ -31,7 +31,7 @@ vector <string> Chuyen(const string input1[], const int N1)
 {
     vector<string> res(N1);
     for (int i = 0; i < N1; i++) {
-        for (int j = 0; j < input1[i].size(); j += 2) {
+        for (int j = 0; j < (int)input1[i].size(); j += 2) {
             string s;
             if (input1[i][j] != ' ') {
                 s.push_back(input1[i][j]); s.push_back(input1[i][j + 1]);
@@ -49,7 +49,7 @@ vector <string> Chuyen(const string input1[], const int N1)
 int demSo(string s)
 {
     int dem = 0;
-    for (unsigned int i = 0; i < s.size(); i++) {
+    for (int i = 0; i < (int)s.size(); i++) {
         if (s[i] == s[0]) dem++;
     }
     while (dem > 7) dem -= 7;
@@ -60,7 +60,7 @@ int kiemTra(string s)
 {
     if (s[0] == 'V' && s[1] == 'U' && s[2] == 'A') return 1; //co vua
     else {
-        for (int i = 2; i < s.size() - 1; i++) {
+        for (int i = 2; i < (int)s.size() - 1; i++) {
             if (s[i - 1] == 'T' && s[i] == 'H' && s[i + 1] == 'D') return -1; // co tuong
         }
     }
@@ -120,7 +120,7 @@ char Them(char C)
 string dao(string input)
 {
     string res;
-    for (unsigned int i = 0; i < input.size(); i++) {
+    for (int i = 0; i < (int)input.size(); i++) {
         res += input[input.size() - i - 1];
     }
     return res;
@@ -129,20 +129,20 @@ string dao(string input)
 void giaiMa(string& str)
 {
     string hashAt;
-    for (int i = 0; i < str.size(); i++) {
+    for (int i = 0; i < (int)str.size(); i++) {
         string tach;
         if ((str[0] == '#' || str[0] == '@') && str.size() == 1) str = "";
         else {
             while (str[str.size() - 1] == '#' || str[str.size() - 1] == '@') str.erase(str.size() - 1, 1);
             if (str[i] == '#' || str[i] == '@') {
                 tach += str[i];
-                for (int j = i + 1; j < str.size(); j++) { // if the character != # and @ tao chuoi moi
+                for (int j = i + 1; j < (int)str.size(); j++) { // if the character != # and @ tao chuoi moi
                     if (str[j] != '#' && str[j] != '@') tach += str[j];
                     else {
                         i = j-1 ;
                         break;
                     }
-                    i = str.size();
+                    i = (int)str.size();
                 }
 
                 if (tach[0] == '#') {
@@ -163,8 +163,8 @@ void giaiMa(string& str)
 //sap xep
 string sortS(string s)
 {
-    for (int i = 0; i < s.size(); i++) {
-        for (int j = i + 1; j < s.size(); j++) {
+    for (int i = 0; i < (int)s.size(); i++) {
+        for (int j = i + 1; j < (int)s.size(); j++) {
             if (s[i] > s[j]) swap(s[i], s[j]);
         }
     }
@@ -222,7 +222,7 @@ int StringInt(string s) {
 //dich chuoi
 void shiftArray(string& arr, int B) {
     //TODO
-    int n = arr.size();
+    int n = (int)arr.size();
     if (B < 0) {
         for (int i = 0; i < abs(B); i++) {
             char x = arr[0];
@@ -256,38 +256,38 @@ int Maxx(int* arr, int size) {
     else return arr[size - 1] > Maxx(arr, size - 1) ? arr[size - 1] : Maxx(arr, size - 1);
 }
 // chuyen tu chuoi sang ma tran
-vector<vector<int>> stringToMatrix(string input, int N7) {
-    vector<vector<int>> Matrix(N7, vector<int>(N7));
+vector<vector<long long>> stringToMatrix(string input, int N7) {
+    vector<vector<long long>> Matrix(N7, vector<long long>(N7));
     string s = "";
     int x = 0, y = 0;
-    for (int i = 0; i < input.size(); i++) {
+    for (int i = 0; i < (int)input.size(); i++) {
         if (input[i] != ' ') s += input[i];
         else {
             if (y == N7) {
                 x++;
                 y = 0;
             }
-            Matrix[x][y] = StringInt(s);
+            Matrix[x][y] = stoi(s);
             s = ""; y++;
         }
     }
+    Matrix[x][y] = stoi(s);
     return Matrix;
 }
-//ket qua phep nhan (chu nhat ta test thu xem^^)
-vector<vector<long long>> resultVector(vector<vector<long long>> A, vector<vector<int>> B, int N7) {
-    vector<vector<long long>> res(N7, vector<long long>(N7));
+// ket qua phep nhan 
+vector<long long> resVector(vector<long long> A, vector<vector<long long>> B, int N7, int V) {
+    vector<long long> res(N7);
     for (int i = 0; i < N7; i++) {
         for (int j = 0; j < N7; j++) {
-            for (int x = 0; x < N7; x++)
-                res[i][j] += A[i][x] * B[x][j];
-        }
+            res[i] += (A[j] * B[j][i])%V;
+       }
     }
     return res;
 }
 //dem V trong chuoi
 int demV(string s) {
     int dem = 0;
-    for (int i = 0; i < s.size(); i++) {
+    for (int i = 0; i < (int)s.size(); i++) {
         if (s[i] == 'V') dem++;
     }
     return dem;
@@ -298,9 +298,9 @@ string readyForBattle(const string ID[], const int NID, const string input1[], c
     vector <string> res = Chuyen(input1, N1);
     //tao chuoi
     vector <string> ans(N1);
-    for (int i = 0; i < res.size(); i++) {
+    for (int i = 0; i < (int)res.size(); i++) {
         int dem = 0; int j = 0;
-        for (; j < res[i].size(); j++) {
+        for (; j < (int)res[i].size(); j++) {
             if (res[i][j] != ' ') {
                 dem++;
             }
@@ -312,11 +312,11 @@ string readyForBattle(const string ID[], const int NID, const string input1[], c
         ans[i] += taoChuoi(res[i][j - 1], dem);
         dem = 0;
     }
-    for (int i = 0; i < ans.size(); i++) {
+    for (int i = 0; i < (int)ans.size(); i++) {
         giaiMa(ans[i]);
     }
-    for (int i = 0; i < ans.size(); i++) {
-        for (int j = 0; j < ans[i].size(); j++) {
+    for (int i = 0; i < (int)ans.size(); i++) {
+        for (int j = 0; j < (int)ans[i].size(); j++) {
             if (ans[i][j] == '@' || ans[i][j] == '#') {
                 ans[i].erase(j, 1);
                 j--;
@@ -328,14 +328,14 @@ string readyForBattle(const string ID[], const int NID, const string input1[], c
         if (kiemTra(ID[i]) == 1) {
             for (int i = 0; i < N1; i++) {
                 string chan, le;
-                for (int j = 0; j < ans[i].size(); j++) {
+                for (int j = 0; j < (int)ans[i].size(); j++) {
                     if (j % 2 == 0) le += ans[i][j];
                     else chan += ans[i][j];
                 }
                 chan = dao(chan);
                 le = dao(le);
                 int index = 0;
-                for (int j = 0; j < ans[i].size(); j++) {
+                for (int j = 0; j < (int)ans[i].size(); j++) {
                     if (index % 2 == 0) {
                         if (le[index / 2] > ans[i][j]) ans[i][j] = le[index / 2];
                     }
@@ -350,7 +350,7 @@ string readyForBattle(const string ID[], const int NID, const string input1[], c
         else if (kiemTra(ID[i]) == -1) {
             for (int i = 0; i < N1; i++) {
                 int cout = 0;
-                for (int j = 0; j < ans[i].size(); j++) {
+                for (int j = 0; j < (int)ans[i].size(); j++) {
                     if ((j + cout) % 3 == 0) {
                         ans[i].erase(j , 1);
                         cout++;
@@ -401,7 +401,7 @@ string findRoute(const string input3)
 {
     vector<string> input;
     string s;
-    for (int i = 0; i < input3.size(); i++) {
+    for (int i = 0; i < (int)input3.size(); i++) {
         if (input3[i] != ' ') s += input3[i];
         else {
             input.push_back(s);
@@ -415,11 +415,11 @@ string findRoute(const string input3)
     int B = StringInt(input[1]);
     //Dich chuoi
     shiftArray(input[2], B);
-    for (int i = 0; i < input[2].size(); i++) {
+    for (int i = 0; i < (int)input[2].size(); i++) {
         input[2][i] = change(input[2][i], N, i);
     }
     int x = 0, y = 0;
-    for (int i = 0; i < input[2].size(); i++) {
+    for (int i = 0; i < (int)input[2].size(); i++) {
         if (input[2][i] == 'U') y++;
         else if (input[2][i] == 'D') y--;
         else if (input[2][i] == 'R') x++;
@@ -450,35 +450,34 @@ string decodeVfunction(const string A, const string B)
     }
     return result;
 }
-//sua lai cai return
 string findBetrayals(const string input5[], const int N5)
 {
     int kiTu[26] = {};
     string res;
     for (int i = 0; i < N5; i++) {
-        for (int j = 0; j < input5[i].size(); j++) {
+        for (int j = 0; j < (int)input5[i].size(); j++) {
             kiTu[input5[i][j] - 65] += 6 - j;
         }
     }
     int count = 0;
-    for (int j = 0;; j++) {
-        int x = Maxx(kiTu, 26) - j;
+    while (count < 3) {
+        int x = Maxx(kiTu, 26);
         for (int i = 0; i <= 25; i++) {
             if (kiTu[i] == x && count < 3) {
                 res += i + 'A';
                 count++;
+                kiTu[i] = -1;
             }
-            if (count == 3) return res;
         }
     }
-    return "You can remove this return";
+    return res;
 }
 int attack(const string input6[])
 {
     string res;
     int danThuong[10] = {};
     for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < input6[i].size(); j++) {
+        for (int j = 0; j < (int)input6[i].size(); j++) {
             if (input6[i][j] == '0') danThuong[i]++;
             if (input6[i][j] == '2') { // khi no bang 2 thi khong danh duoc
                 danThuong[i] = -1;
@@ -494,32 +493,30 @@ int attack(const string input6[])
             }
         }
     }
-        if (res != "") return res[res.size() - 1] - '0';
-        return -1;
+    if (res != "") return res[res.size() - 1] - '0';
+    return -1;
 }
 int calculateNoOfWaitingDays(const string input7Str, const string input7Matrix[], const int k)
 {
     vector<int> Lay;
     string s = "";
 
-    for (int i = 0; i < input7Str.size(); i++) {
+    for (int i = 0; i < (int)input7Str.size(); i++) {
         if (input7Str[i] != ' ') s += input7Str[i];
         else {
-            Lay.push_back(StringInt(s));
+            Lay.push_back(stoi(s));
             s = "";
         }
     }
-    Lay.push_back(StringInt(s)); s = "";
+    Lay.push_back(stoi(s)); s = "";
     int N7 = Lay[0], V = Lay[1], i = Lay[2], j = Lay[3];
-    vector<vector<long long>> A(N7, vector<long long>(N7));
-    for (int k = 0; k < N7; k++) {
-        A[k][k] = 1;
-    }
+    vector<long long> row(N7);
+    row[i-1] = 1;
     for (int x = 0; x < k; x++) {
-        vector<vector<int>> B = stringToMatrix(input7Matrix[x], N7);
-        A = resultVector(A, B, N7);
+        vector<vector<long long>> B = stringToMatrix(input7Matrix[x], N7);
+         row = resVector(row, B, N7, V);
     }
-    int res = A[i - 1][j - 1] % V;
+    int res = row[j - 1] % V;
     return res < 0 ? V + res : res;
 }
 
