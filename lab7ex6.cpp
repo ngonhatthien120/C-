@@ -1,45 +1,43 @@
 #include<iostream>
+#include<cstdlib>
 using namespace std;
 
-template <class T> 
-class Array2D {
+template <class T> class Array2D {
     int r;
     int c;
     T** arr;
 public:
-    // TODO
-    Array2D(T _dimen[2], T init) {
-        this->r = _dimen[0];
-        this->c = _dimen[1];
-        this->arr = new T* [r];
+    Array2D(T dimen[], T init) {
+        r = dimen[0];
+        c = dimen[1];
+        if (r <= 0 || c <= 0) {
+            cout << "error\n";
+            exit(-1);
+        }
+        arr = new T * [r];
         for (int i = 0; i < r; i++) {
-            arr[i] = new T[c];
+            arr[i] = new T[c]{};
+            fill_n(arr[i], c, init);
         }
-        arr[r][c] = { init }; //lat coi lai
     }
-    Array2D* operator*(Array2D& other) {
-        Array2D* res ;
-        r = this->r; c = other.c;
-        res.arr = new T* [res.r];
-        for (int i = 0; i < res.r; i++) {
-            res.arr[i] = new T[res.c];
+    Array2D* operator*(Array2D<T>& otherArray) {
+        if (c != otherArray.r) {
+            cout << "error\n";
+            return NULL;
         }
-        res.arr[res.r][res.c] = {};
-
-        for (int i = 0; i < res.r; i++) {
-            for (int j = 0; j < res.c; j++) {
-                for (int k = 0; k < this->c; k++) {
-                    res.arr[i][j] += arr[i][k] + other[k][j];
-                }
-            }
-        }
-        return *res;
+        Array2D<T>* result = new Array2D<T>(new int[2]{ r,otherArray.c }, 0);
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < otherArray.c; j++)
+                for (int k = 0; k < c; k++)
+                    result->arr[i][j] += arr[i][k] * otherArray.arr[k][j];
+        return result;
     }
-    /*T* Array2D <T>::operator [](int x, int y) {
-        return this->arr[x][y];
-    }*/
-    Array2D* operator [] (int x) {
-        return this->arr[x];
+    T*& operator[](int index) {
+        if (r <= index || index < 0) {
+            cout << "error\n";
+            exit(-1);
+        }
+        return arr[index];
     }
     int getR() { return this->r; }
     int getC() { return this->c; }
@@ -52,15 +50,6 @@ public:
             cout << endl;
         }
     }
-    Array2D* operator = ( int hi) {
-        **ar = hi;
-        return *this;
-    }
-    friend Array2D* operator [][](int x, int y);
-    Array2D* operator [][](int x, int y) {
-        return this->arr[x][y];
-    }
-    
 };
 
 int main() {
